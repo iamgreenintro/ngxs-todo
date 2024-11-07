@@ -20,7 +20,11 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-button (click)="cancel()">Cancel</button>
-  <button mat-flat-button [disabled]="!todoFormGroup.valid" (click)="create()">
-    Create
+  <button
+    mat-flat-button
+    [disabled]="!todoFormGroup.valid"
+    (click)="submitValues()"
+  >
+    {{ this.data ? "Edit" : "Create" }}
   </button>
 </mat-dialog-actions>

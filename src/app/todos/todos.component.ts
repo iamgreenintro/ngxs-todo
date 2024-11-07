@@ -75,25 +75,30 @@ export class TodosComponent implements OnInit {
     this.store.dispatch(new TodoActions.Delete(id));
   }
 
-  addTodo(fg: FormGroup): void {
-    const todo: TodoInterface = {
-      title: fg.get('title')?.value,
-      description: fg.get('description')?.value,
-      archived: false,
-    };
+  editTodo(todo: TodoInterface) {
+    this.store.dispatch(new TodoActions.Edit(todo));
+  }
 
+  addTodo(todo: TodoInterface): void {
     this.store.dispatch(new TodoActions.Add(todo));
   }
 
-  openTodoFormDialog(): void {
+  openTodoFormDialog(data?: TodoInterface | null): void {
     const dialogReference: MatDialogRef<TodoFormDialogComponent> =
-      this.dialog.open(TodoFormDialogComponent, { disableClose: true });
+      this.dialog.open(TodoFormDialogComponent, {
+        data: data,
+        disableClose: true,
+      });
 
     dialogReference
       .afterClosed()
-      .subscribe((dialogResponse: { action: boolean; fg?: FormGroup }) => {
-        if (dialogResponse.action && dialogResponse.fg) {
-          this.addTodo(dialogResponse.fg);
+      .subscribe((dialogResponse: { action: boolean; todo: TodoInterface }) => {
+        if (dialogResponse.action) {
+          if (!data) {
+            this.addTodo(dialogResponse.todo);
+          } else {
+            this.editTodo(dialogResponse.todo);
+          }
         }
       });
   }

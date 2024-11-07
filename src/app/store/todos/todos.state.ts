@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { State, Action, Selector, StateContext } from '@ngxs/store';
 import { TodoActions } from './todos.actions';
+import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 
 export interface TodoInterface {
   id?: number;
@@ -29,25 +30,42 @@ export class TodosState {
 
   @Action(TodoActions.Add)
   add(ctx: StateContext<TodosStateModel>, action: TodoActions.Add) {
-    const stateModel = ctx.getState();
-
     action.todo.id = this.counter += 1;
-    ctx.setState({
-      ...stateModel,
-      todos: [...stateModel.todos, action.todo],
-    });
+
+    ctx.setState(
+      patch({
+        todos: append<TodoInterface>([action.todo]),
+      })
+    );
   }
 
   @Action(TodoActions.Delete)
   delete(ctx: StateContext<TodosStateModel>, action: TodoActions.Delete) {
     const stateModel = ctx.getState();
 
-    const newTodos: TodoInterface[] | undefined = stateModel.todos.filter(
-      (todo) => todo.id !== action.id
+    // todo index we want to delete
+    const removeIndex: number = stateModel.todos.findIndex(
+      (todo) => todo.id === action.id
     );
-    ctx.setState({
-      ...stateModel,
-      todos: newTodos,
-    });
+
+    if (removeIndex >= 0) {
+      ctx.setState(
+        patch({
+          todos: removeItem<TodoInterface>(removeIndex),
+        })
+      );
+    }
+  }
+
+  @Action(TodoActions.Edit)
+  edit(ctx: StateContext<TodosStateModel>, action: TodoActions.Edit) {
+    ctx.setState(
+      patch({
+        todos: updateItem<TodoInterface>(
+          (todo) => todo.id === action.todo.id,
+          action.todo
+        ),
+      })
+    );
   }
 }
