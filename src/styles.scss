@@ -1,1 +1,33 @@
-/* You can add global styles to this file, and also import other style files */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background-color: #002f31;
+  color: #ccc;
+}
+
+todos {
+  table {
+    max-width: 800px;
+    margin: auto;
+    .mat-mdc-header-row {
+      background-color: #008086;
+    }
+    .mat-column-id,
+    .mat-column-actions {
+      width: 160px;
+    }
+
+    .archived {
+      text-decoration: line-through;
+    }
+  }
+}
