@@ -30,6 +30,7 @@ export class TodosState {
   @Action(TodoActions.Add)
   add(ctx: StateContext<TodosStateModel>, action: TodoActions.Add) {
     const stateModel = ctx.getState();
+
     action.todo.id = this.counter += 1;
     ctx.setState({
       ...stateModel,
@@ -37,9 +38,16 @@ export class TodosState {
     });
   }
 
-  @Action(TodoActions.Get)
-  get(ctx: StateContext<TodosStateModel>) {
+  @Action(TodoActions.Delete)
+  delete(ctx: StateContext<TodosStateModel>, action: TodoActions.Delete) {
     const stateModel = ctx.getState();
-    console.log(stateModel.todos);
+
+    const newTodos: TodoInterface[] | undefined = stateModel.todos.filter(
+      (todo) => todo.id !== action.id
+    );
+    ctx.setState({
+      ...stateModel,
+      todos: newTodos,
+    });
   }
 }

@@ -19,11 +19,7 @@ import {
   TodosState,
   TodosStateModel,
 } from '../store/todos/todos.state';
-import {
-  MatDialog,
-  MAT_DIALOG_DATA,
-  MatDialogRef,
-} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TodoFormDialogComponent } from '../todo-form-dialog/todo-form-dialog.component';
 
 @Component({
@@ -75,12 +71,17 @@ export class TodosComponent implements OnInit {
     this.route.navigate(['/data-state-testing']);
   }
 
+  deleteTodo(id: number) {
+    this.store.dispatch(new TodoActions.Delete(id));
+  }
+
   addTodo(fg: FormGroup): void {
     const todo: TodoInterface = {
       title: fg.get('title')?.value,
       description: fg.get('description')?.value,
       archived: false,
     };
+
     this.store.dispatch(new TodoActions.Add(todo));
   }
 
