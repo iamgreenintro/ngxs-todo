@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Store } from '@ngxs/store';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { TodoActions } from '../store/todos/todos.actions';
 import {
   FormControl,
   FormGroup,
@@ -11,15 +13,12 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { Observable } from 'rxjs';
 
-import { TodoActions } from '../store/todos/todos.actions';
 import {
   TodoInterface,
   TodosState,
   TodosStateModel,
 } from '../store/todos/todos.state';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TodoFormDialogComponent } from '../todo-form-dialog/todo-form-dialog.component';
 
 @Component({
@@ -33,7 +32,6 @@ import { TodoFormDialogComponent } from '../todo-form-dialog/todo-form-dialog.co
     MatButtonModule,
   ],
   templateUrl: './todos.component.html',
-  styleUrl: './todos.component.scss',
 })
 export class TodosComponent implements OnInit {
   todosState$: Observable<TodosStateModel> = new Observable();
@@ -52,11 +50,7 @@ export class TodosComponent implements OnInit {
     'archived',
     'actions',
   ];
-  constructor(
-    private store: Store,
-    private route: Router,
-    private dialog: MatDialog
-  ) {
+  constructor(private store: Store, private dialog: MatDialog) {
     this.todosState$ = this.store.select(TodosState.getState);
   }
 
@@ -65,10 +59,6 @@ export class TodosComponent implements OnInit {
       this.todos = state.todos;
       this.tableDatasource.data = this.todos;
     });
-  }
-
-  navigate(): void {
-    this.route.navigate(['/data-state-testing']);
   }
 
   deleteTodo(id: number) {
@@ -83,11 +73,17 @@ export class TodosComponent implements OnInit {
     this.store.dispatch(new TodoActions.Add(todo));
   }
 
+  toggleTodoArchivedState(todo: TodoInterface): void {
+    todo.archived = !todo.archived;
+    this.editTodo(todo);
+  }
+
   openTodoFormDialog(data?: TodoInterface | null): void {
     const dialogReference: MatDialogRef<TodoFormDialogComponent> =
       this.dialog.open(TodoFormDialogComponent, {
         data: data,
         disableClose: true,
+        minWidth: 450,
       });
 
     dialogReference

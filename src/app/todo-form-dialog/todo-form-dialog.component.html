@@ -11,7 +11,7 @@
 
     <mat-form-field>
       <mat-label>Description</mat-label>
-      <input matInput formControlName="description" />
+      <textarea matInput formControlName="description"></textarea>
       <mat-error *ngIf="todoFormGroup.get('description')?.hasError('required')">
         The description field is required.
       </mat-error>

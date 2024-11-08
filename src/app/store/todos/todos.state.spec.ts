@@ -1,14 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import {  provideStore,  Store } from '@ngxs/store';
+import { provideStore, Store } from '@ngxs/store';
 import { TodosState, TodosStateModel } from './todos.state';
-import { TodosAction } from './todos.actions';
+import { TodoActions } from './todos.actions';
 
 describe('Todos store', () => {
   let store: Store;
   beforeEach(() => {
     TestBed.configureTestingModule({
-       providers: [provideStore([TodosState])]
-      
+      providers: [provideStore([TodosState])],
     });
 
     store = TestBed.inject(Store);
@@ -16,11 +15,16 @@ describe('Todos store', () => {
 
   it('should create an action and add an item', () => {
     const expected: TodosStateModel = {
-      items: ['item-1']
+      todos: [],
     };
-    store.dispatch(new TodosAction('item-1'));
+    store.dispatch(
+      new TodoActions.Add({
+        title: '',
+        description: '',
+        archived: false,
+      })
+    );
     const actual = store.selectSnapshot(TodosState.getState);
     expect(actual).toEqual(expected);
   });
-
 });

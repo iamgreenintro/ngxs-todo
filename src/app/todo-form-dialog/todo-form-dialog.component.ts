@@ -29,7 +29,6 @@ import { TodoInterface } from '../store/todos/todos.state';
     MatButtonModule,
   ],
   templateUrl: './todo-form-dialog.component.html',
-  styleUrl: './todo-form-dialog.component.scss',
 })
 export class TodoFormDialogComponent {
   todoFormGroup: FormGroup = new FormGroup({

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { State, Action, Selector, StateContext } from '@ngxs/store';
-import { TodoActions } from './todos.actions';
 import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
+import { TodoActions } from './todos.actions';
 
 export interface TodoInterface {
   id?: number;
@@ -22,7 +22,7 @@ export interface TodosStateModel {
 })
 @Injectable()
 export class TodosState {
-  private counter: number = 0;
+  private counter: number = 0; // will act as an ID for the todo's.
   @Selector()
   static getState(state: TodosStateModel) {
     return state;

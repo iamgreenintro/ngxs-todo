@@ -14,20 +14,24 @@ body {
   color: #ccc;
 }
 
+mat-form-field.mat-mdc-form-field {
+  display: block;
+}
+
 todos {
-  table {
-    max-width: 800px;
+  table.mat-mdc-table {
     margin: auto;
+    min-width: unset;
+    max-width: 1100px;
+    width: 100%;
+
     .mat-mdc-header-row {
       background-color: #008086;
-    }
-    .mat-column-id,
-    .mat-column-actions {
-      width: 160px;
     }
 
     .archived {
       text-decoration: line-through;
+      background-color: #646464;
     }
   }
 }
